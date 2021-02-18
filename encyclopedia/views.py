@@ -33,11 +33,6 @@ def search(request):
         filenames = util.list_entries()
 
         matches = []
-        # use for not case-sensitive values
-        #for match in filenames:
-        #    if search.upper() in match.upper():
-        #        matches.append(match)
-
         # use for case-sensitive valuess
         matches = list(filter(lambda searching : search.lower() in searching.lower(), filenames))
         
