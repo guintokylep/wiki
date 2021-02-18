@@ -38,7 +38,7 @@ def search(request):
         #    if search.upper() in match.upper():
         #        matches.append(match)
 
-        # use for case-sensitive values
+        # use for case-sensitive valuess
         matches = list(filter(lambda searching : search.lower() in searching.lower(), filenames))
         
         # if more than 1 matches, it will increase the limit
