@@ -1,0 +1,11 @@
+{% extends "encyclopedia/index.html" %}
+
+{% block body %}
+
+    {% if wikiDisplay == None %}
+        <h1 style="color:red">Requested Page was not Found</h1>
+    {% else %}
+        {{ wikiDisplay|safe|escape }}
+    {% endif %}
+
+{% endblock %}
