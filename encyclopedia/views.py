@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 import markdown2
 
 from . import util
@@ -9,17 +11,39 @@ def index(request):
         "entries": util.list_entries()
     })
 def create(request):
-    return render(request, "encyclopedia/createNewPage.html")
-
-def createPage(request):
     if request.method == "POST":
         title = request.POST["title"]
         contents = request.POST["contents"]
-        if title != "" and contents != "":
-            util.save_entry(title, contents)
+        flag = request.POST["flag"]
 
-    return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries()
+        if title != "" and contents != "":
+            progress = util.save_entry(title, contents, flag)
+
+            if flag == "add" and progress == "existing":
+                return render(request, "encyclopedia/createNewPage.html", {
+                    "message": "File is already exist.",
+                    "title": title,
+                    "contents": contents
+                })
+            elif flag == "edit" and progress == "not existing":
+                return render(request, "encyclopedia/createNewPage.html", {
+                    "message": "File is not exist.",
+                    "title": title,
+                    "contents": contents
+                })
+        if flag == "edit":
+            return HttpResponseRedirect(reverse("wikiContents", args=(title,)))
+        else:        
+            return HttpResponseRedirect(reverse("index"))
+
+    return render(request, "encyclopedia/createNewPage.html")
+
+def update(request, edit):
+    contents = util.get_entry(edit)
+
+    return render(request, "encyclopedia/editPage.html",{
+        "title": edit,
+        "contents": contents
     })
 
 def wikiContents(request, wikiContents):
@@ -65,6 +89,7 @@ def searchLogic(request, search):
         wikiDisplay = markdowner.convert(wikiDisplay)
 
     return render(request, "encyclopedia/wikiDisplay.html", {
-        "wikiDisplay": wikiDisplay
+        "wikiDisplay": wikiDisplay,
+        "entry": search
     })
 

@@ -8,4 +8,8 @@
         {{ wikiDisplay|safe|escape }}
     {% endif %}
 
+    <form action="edit/{{ entry }}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="edit">
+    </form>
 {% endblock %}

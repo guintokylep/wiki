@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <h1>Create New Page</h1>
+    <h1>Edit Page</h1>
 
     {% if message %}
         <div>{{ message }}</div>
@@ -17,7 +17,7 @@
         <div>
             <h3>Contents</h3>
             <textarea name="contents" style="width: 800px; height:400px;">{{ contents }}</textarea>
-            <input type="text" name="flag" value="add" hidden> 
+            <input type="text" name="flag" value="edit" hidden>
         </div>
         <div>
             <input type="submit" value="Submit">
