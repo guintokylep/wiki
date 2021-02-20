@@ -7,16 +7,23 @@ from . import util
 from markdown2 import Markdown
 
 def index(request):
+    request.session["flag"] = "add"
+
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
     })
+    
 def create(request):
     if request.method == "POST":
-        title = request.POST["title"]
         contents = request.POST["contents"]
-        flag = request.POST["flag"]
+        flag = request.session.get("flag")
+        
+        if flag == "add":
+            title = request.POST["title"]
+        else:
+            title = request.session.get("title")
 
-        if title != "" and contents != "":
+        if title != "":
             progress = util.save_entry(title, contents, flag)
 
             if flag == "add" and progress == "existing":
@@ -25,22 +32,22 @@ def create(request):
                     "title": title,
                     "contents": contents
                 })
-            elif flag == "edit" and progress == "not existing":
-                return render(request, "encyclopedia/createNewPage.html", {
-                    "message": "File is not exist.",
-                    "title": title,
-                    "contents": contents
-                })
-                
-        return HttpResponseRedirect(reverse("wikiContents", args=(title,)))
+            return HttpResponseRedirect(reverse("wikiContents", args=(title,)))
+        else:
+            return render(request, "encyclopedia/index.html", {
+                "entries": util.list_entries()
+            })
 
+    request.session["flag"] = "add"
     return render(request, "encyclopedia/createNewPage.html")
 
-def update(request, edit):
-    contents = util.get_entry(edit)
-
+def update(request, title):
+    contents = util.get_entry(title)
+    request.session["flag"] = "edit"
+    request.session["title"] = title
+    
     return render(request, "encyclopedia/editPage.html",{
-        "title": edit,
+        "title": title,
         "contents": contents
     })
 

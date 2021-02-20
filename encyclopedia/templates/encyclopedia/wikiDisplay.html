@@ -6,10 +6,11 @@
         <h1 style="color:red">Requested Page was not Found</h1>
     {% else %}
         {{ wikiDisplay|safe|escape }}
+
+        <form action="edit/{{ entry }}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="edit">
+        </form>
     {% endif %}
 
-    <form action="edit/{{ entry }}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="edit">
-    </form>
 {% endblock %}

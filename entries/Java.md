@@ -1,3 +1,3 @@
 # Java
 
-Java is Java.
+Java is not **Javascript**.
