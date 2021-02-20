@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import markdown2
+import random
 
 from . import util
 from markdown2 import Markdown
@@ -12,7 +13,7 @@ def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
     })
-    
+
 def create(request):
     if request.method == "POST":
         contents = request.POST["contents"]
@@ -97,4 +98,10 @@ def searchLogic(request, search):
         "wikiDisplay": wikiDisplay,
         "entry": search
     })
+
+def randomPage(request):
+    randomPage = random.choice(tuple(util.list_entries()))
+
+    return searchLogic(request, randomPage)
+
 
