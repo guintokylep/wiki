@@ -31,10 +31,8 @@ def create(request):
                     "title": title,
                     "contents": contents
                 })
-        if flag == "edit":
-            return HttpResponseRedirect(reverse("wikiContents", args=(title,)))
-        else:        
-            return HttpResponseRedirect(reverse("index"))
+                
+        return HttpResponseRedirect(reverse("wikiContents", args=(title,)))
 
     return render(request, "encyclopedia/createNewPage.html")
 
