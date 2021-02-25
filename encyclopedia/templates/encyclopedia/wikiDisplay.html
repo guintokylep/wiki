@@ -3,7 +3,7 @@
 {% block body %}
 
     {% if wikiDisplay == None %}
-        <h1 style="color:red">Requested Page was not Found</h1>
+        <h1 style="color:red">{{ entry }} Page was not Found</h1>
     {% else %}
         {{ wikiDisplay|safe|escape }}
 
